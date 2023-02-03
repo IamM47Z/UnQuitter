@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "tk.m47z.unquitter.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "UnQuitterWindowProvider",
+    "UnQuitterMacWindowUtil"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
