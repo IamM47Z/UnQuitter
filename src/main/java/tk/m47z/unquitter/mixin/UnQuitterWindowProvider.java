@@ -1,5 +1,6 @@
 package tk.m47z.unquitter.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import tk.m47z.unquitter.Main;
 
 import net.minecraft.client.util.Window;
@@ -19,29 +20,40 @@ class UnQuitterWindowProvider
 	private
 	void createWindowTail( CallbackInfoReturnable< Window > cir )
 	{
-		if (cir.getReturnValue() == null || cir.getReturnValue().getHandle() == 0)
+		if ( cir.getReturnValue( ) == null || cir.getReturnValue( ).getHandle( ) == 0 )
 			return;
 		
-		long hwnd_id = cir.getReturnValue().getHandle();
+		long hwnd_id = cir.getReturnValue( ).getHandle( );
 		
 		Main.LOGGER.info( "UnQuitter: patching window " + hwnd_id );
 		
-		glfwSetWindowCloseCallback( hwnd_id, (hwnd) ->
+		glfwSetWindowCloseCallback( hwnd_id, ( hwnd ) ->
 		{
 			Main.LOGGER.info( "UnQuitter: window close callback called" );
 			
-			glfwSetWindowShouldClose( hwnd, false );
-		});
+			// Cancel while in game
+			if ( MinecraftClient.getInstance( ).currentScreen == null )
+			{
+				glfwSetWindowShouldClose( hwnd, false );
+				MinecraftClient.getInstance( ).keyboard.onKey( hwnd_id, GLFW_KEY_Q, 0, GLFW_PRESS, GLFW_MOD_SUPER );
+			}
+		} );
 		
-		UnQuitterMacWindowUtil.getCocoaWindow( hwnd_id ).ifPresent( (hwnd) ->
-		{
-			Long style_mask = ( Long ) hwnd.send( "styleMask" );
-			Main.LOGGER.info( "UnQuitter: styleMask: " + style_mask );
+		UnQuitterMacWindowUtil.getCocoaWindow( hwnd_id ).ifPresent( ( hwnd ) ->
+		                                                            {
+			                                                            Long style_mask = ( Long ) hwnd.send(
+					                                                            "styleMask" );
 			
-			hwnd.send( "setStyleMask:",style_mask - 4 );
+			                                                            if ( ( style_mask & 4 ) == 0 )
+				                                                            return;
 			
-			style_mask = ( Long ) hwnd.send( "styleMask" );
-			Main.LOGGER.info( "UnQuitter: styleMask: " + style_mask );
-		});
+			                                                            // remove hidden button
+			                                                            hwnd.send( "setStyleMask:", style_mask - 4 );
+			
+			                                                            style_mask = ( Long ) hwnd.send( "styleMask" );
+			                                                            Main.LOGGER.info(
+					                                                            "UnQuitter: styleMask: " + style_mask );
+		                                                            } );
+		
 	}
 }

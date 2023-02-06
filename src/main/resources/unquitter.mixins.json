@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "UnQuitterWindowProvider",
-    "UnQuitterMacWindowUtil"
+    "UnQuitterMacWindowUtil",
+    "UnQuitterMinecraftClient",
+    "UnQuitterWindow",
+    "UnQuitterWindowProvider"
   ],
   "server": [],
   "injectors": {
