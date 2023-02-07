@@ -7,6 +7,8 @@
 
 name: build
 on: [ pull_request, push ]
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -35,3 +37,9 @@ jobs:
         with:
           name: UnQuitter-${{env.plugin_version}}.jar
           path: build/libs/*-${{env.plugin_version}}.jar
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: UnQuitter ${{env.plugin_version}}
+          files: build/libs/*-${{env.plugin_version}}.jar
