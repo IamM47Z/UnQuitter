@@ -1,5 +1,8 @@
 name: release
-on: push
+on:
+  push:
+    tags:
+      - v**
 
 permissions:
   contents: write
@@ -7,10 +10,11 @@ permissions:
 jobs:
   release:
     runs-on: macos-latest
-    if: startsWith(github.ref, 'refs/tags/v')
     concurrency: on_push
     steps:
-      - name: "upload"
+      - name: build
+      uses: ./.github/workflows/build.yml
+      - name: upload
       uses: softprops/action-gh-release@v1
       with:
         name: UnQuitter ${{env.plugin_version}}

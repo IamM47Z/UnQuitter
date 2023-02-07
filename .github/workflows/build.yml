@@ -1,5 +1,11 @@
 name: build
-on: push
+
+on:
+  push:
+    tags-ignore:
+      - v**
+
+  workflow_call:
 
 jobs:
   build:
