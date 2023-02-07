@@ -29,12 +29,11 @@ class UnQuitterWindow
 		{
 			Main.LOGGER.info( "UnQuitter: window close callback called" );
 			
-			// Cancel while in game
-			if ( MinecraftClient.getInstance( ).currentScreen == null )
-			{
-				glfwSetWindowShouldClose( hwnd, false );
+			// Propagate the keys used to close the window (CMD + Q)
+			if ( !MinecraftClient.getInstance( ).isPaused( ) )
 				MinecraftClient.getInstance( ).keyboard.onKey( this.handle, GLFW_KEY_Q, 0, GLFW_PRESS, GLFW_MOD_SUPER );
-			}
+			
+			glfwSetWindowShouldClose( hwnd, MinecraftClient.getInstance( ).isPaused( ) );
 		} );
 		
 		UnQuitterMacWindowUtil.getCocoaWindow( this.handle ).ifPresent( ( hwnd ) ->

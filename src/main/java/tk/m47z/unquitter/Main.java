@@ -1,7 +1,6 @@
 package tk.m47z.unquitter;
 
 import ca.weblite.objc.Client;
-import ca.weblite.objc.Proxy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
