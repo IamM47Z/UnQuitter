@@ -26,7 +26,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name : retrieve version
-          run: echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q getVersion)"
+          run: echo "::set-output name=VERSION_NAME::$(./gradlew -q getVersion)"
           id: plugin_version
       - name: get version
         run: echo "version_name=${{steps.plugin_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV
