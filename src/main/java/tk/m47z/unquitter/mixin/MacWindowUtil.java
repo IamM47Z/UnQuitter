@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Mixin( net.minecraft.client.util.MacWindowUtil.class )
 public
-interface UnQuitterMacWindowUtil
+interface MacWindowUtil
 {
 	@Invoker( "getCocoaWindow" )
 	static
