@@ -10,16 +10,19 @@ permissions:
 jobs:
   release:
     runs-on: macos-latest
+    concurrency: on_push
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
       - name: set version
         run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
         id: plugin
-      - name: build
-        uses: ./.github/workflows/build.yml
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: UnQuitter-${{steps.plugin.outputs.version}}.jar
       - name: upload
         uses: softprops/action-gh-release@v1
         with:
           name: UnQuitter v${{steps.plugin.outputs.version}}
-          files: build/libs/*-${{steps.plugin.outputs.version}}.jar
+          files: UnQuitter-${{steps.plugin.outputs.version}}.jar
