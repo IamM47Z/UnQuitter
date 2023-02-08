@@ -26,13 +26,11 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name : set version
+      - name: set version
         run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
         id: plugin
-      - name: get version
-        run: echo "plugin_version=${{steps.plugin.outputs.version}}" >> $GITHUB_ENV
       - name: capture 
         uses: actions/upload-artifact@v3
         with:
-          name: UnQuitter-${{env.plugin_version}}.jar
-          path: build/libs/*-${{env.plugin_version}}.jar
+          name: UnQuitter-${{steps.plugin.outputs.version}}.jar
+          path: build/libs/*-${{steps.plugin.outputs.version}}.jar

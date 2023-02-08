@@ -12,10 +12,15 @@ jobs:
     runs-on: macos-latest
     concurrency: on_push
     steps:
-      - name: build
-      uses: ./.github/workflows/build.yml
+      - name: set version
+        run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
+        id: plugin
+      - name: download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: UnQuitter-${{steps.plugin.outputs.version}}.jar
       - name: upload
-      uses: softprops/action-gh-release@v1
-      with:
-        name: UnQuitter ${{env.plugin_version}}
-        files: build/libs/*-${{env.plugin_version}}.jar
+        uses: softprops/action-gh-release@v1
+        with:
+          name: UnQuitter v${{steps.plugin.outputs.versio}}
+          files: UnQuitter-${{steps.plugin.outputs.version}}.jar
