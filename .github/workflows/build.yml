@@ -1,6 +1,9 @@
 name: build
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -27,5 +30,5 @@ jobs:
       - name: capture 
         uses: actions/upload-artifact@v3
         with:
-          name: UnQuitter-${{steps.plugin.outputs.version}}-run${{github.run_number}}.jar
+          name: UnQuitter-${{steps.plugin.outputs.version}}.jar
           path: build/libs/*-${{steps.plugin.outputs.version}}.jar
