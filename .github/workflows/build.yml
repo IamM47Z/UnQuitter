@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    concurrency: on_push
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
