@@ -3,16 +3,16 @@ package tk.m47z.unquitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
 public
-class Main extends UnQuitter implements ModInitializer
+class Client extends UnQuitter implements ClientModInitializer
 {
 	public static final Logger LOGGER = LoggerFactory.getLogger( "unquitter" );
 	
 	@Override
 	public
-	void onInitialize( )
+	void onInitializeClient( )
 	{
 		LOGGER.info( "Initializing UnQuitter" );
 	}

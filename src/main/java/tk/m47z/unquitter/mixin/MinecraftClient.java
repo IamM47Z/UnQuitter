@@ -1,6 +1,6 @@
 package tk.m47z.unquitter.mixin;
 
-import tk.m47z.unquitter.Main;
+import tk.m47z.unquitter.Client;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
@@ -30,9 +30,9 @@ class MinecraftClient
 			return;
 		
 		if ( screen == null || !screen.shouldPause( ) )
-			Main.onResume( );
+			Client.onResume();
 		else
-			Main.onPause( );
+			Client.onPause();
 	}
 	
 	@Inject( method = "setOverlay", at = @At( "HEAD" ) )
@@ -43,8 +43,8 @@ class MinecraftClient
 			return;
 		
 		if ( overlay == null || !overlay.pausesGame( ) )
-			Main.onResume( );
+			Client.onResume();
 		else
-			Main.onPause( );
+			Client.onPause();
 	}
 }
