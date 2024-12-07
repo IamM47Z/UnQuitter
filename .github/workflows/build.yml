@@ -2,8 +2,6 @@ name: build
 
 on:
   push:
-    branches:
-      - master
     paths:
       - src/**
 
@@ -28,8 +26,11 @@ jobs:
       - name: set version
         run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
         id: plugin
+      - name: set mc version
+        run: echo "mc_version=$(./gradlew -q getMinecraftVersion)" >> $GITHUB_OUTPUT
+        id: plugin
       - name: capture 
         uses: actions/upload-artifact@v3
         with:
-          name: UnQuitter-${{steps.plugin.outputs.version}}-id$((github.run_id)).jar
-          path: build/libs/*-${{steps.plugin.outputs.version}}.jar
+          name: UnQuitter-v${{steps.plugin.outputs.version}}-mc${{steps.plugin.outputs.mc_version}}-id$((github.run_id)).jar
+          path: build/libs/*-v${{steps.plugin.outputs.version}}.jar
