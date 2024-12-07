@@ -1,8 +1,7 @@
 name: release
 on:
   push:
-    tags:
-      - v**
+    branches: [master]
 
 permissions:
   contents: write
@@ -25,11 +24,29 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: set version
+      - name: set plugin version
         run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
         id: plugin
+      - name: set mc version
+        run: echo "version=$(./gradlew -q getMinecraftVersion)" >> $GITHUB_OUTPUT
+        id: mc
+      - name: set release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::v${{steps.plugin.outputs.version}}-mc${{steps.mc.outputs.version}}"
+      - name: create release tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{steps.tag.outputs.release_tag}}',
+              sha: context.sha
+            })
       - name: upload
         uses: softprops/action-gh-release@v1
         with:
-          name: UnQuitter v${{steps.plugin.outputs.version}}
+          tag_name: ${{steps.tag.outputs.release_tag}}
+          name: UnQuitter v${{steps.plugin.outputs.version}} for Minecraft v${{steps.mc.outputs.version}}
           files: build/libs/*-${{steps.plugin.outputs.version}}.jar
