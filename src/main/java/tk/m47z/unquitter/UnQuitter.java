@@ -3,7 +3,6 @@ package tk.m47z.unquitter;
 import tk.m47z.unquitter.mixin.MacWindowUtil;
 
 import ca.weblite.objc.Proxy;
-import ca.weblite.objc.Client;
 
 import net.minecraft.client.MinecraftClient;
 
@@ -14,7 +13,7 @@ public
 class UnQuitter
 {
 	private static       boolean paused = true;
-	private static final Proxy   app    = Client.getInstance( ).sendProxy( "NSApplication", "sharedApplication" );
+	private static final Proxy   app    = ca.weblite.objc.Client.getInstance().sendProxy("NSApplication", "sharedApplication");
 	
 	private static final long default_opts = ( long ) app.send( "presentationOptions" );
 	
@@ -28,19 +27,19 @@ class UnQuitter
 	void setPresentationOptions( long opts )
 	{
 		app.send( "setPresentationOptions:", opts );
-		Main.LOGGER.info( "Set presentation options: " + app.send( "presentationOptions" ) );
+		Client.LOGGER.info("Set presentation options: " + app.send("presentationOptions"));
 	}
 	
 	private static
 	long getStyleMask( long hwnd_id ) throws NoSuchElementException
 	{
-		return ( long ) MacWindowUtil.getCocoaWindow( hwnd_id ).orElseThrow( ).send( "styleMask" );
+		return ( long ) MacWindowUtil.getCocoaWindow(hwnd_id).orElseThrow().send("styleMask");
 	}
 	
 	private static
 	void setStyleMask( long hwnd_id, long style_mask ) throws NoSuchElementException
 	{
-		MacWindowUtil.getCocoaWindow( hwnd_id ).orElseThrow( ).send( "setStyleMask:", style_mask );
+		MacWindowUtil.getCocoaWindow(hwnd_id).orElseThrow().send("setStyleMask:", style_mask);
 	}
 	
 	public static
@@ -56,7 +55,7 @@ class UnQuitter
 			return;
 		
 		paused = true;
-		Main.LOGGER.info( "UnQuitter: onPause" );
+		Client.LOGGER.info("UnQuitter: onPause");
 		
 		long opts = getPresentationOptions( );
 		if ( !Objects.equals( opts, default_opts ) )
@@ -78,7 +77,7 @@ class UnQuitter
 			return;
 		
 		paused = false;
-		Main.LOGGER.info( "UnQuitter: onResume" );
+		Client.LOGGER.info("UnQuitter: onResume");
 		
 		long opts = getPresentationOptions( );
 		if ( Objects.equals( opts, default_opts ) )
