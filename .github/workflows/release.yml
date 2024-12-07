@@ -1,8 +1,7 @@
 name: release
 on:
   push:
-    tags:
-      - v**
+    branches: [master]
 
 permissions:
   contents: write
@@ -25,11 +24,14 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: set version
+      - name: set plugin version
         run: echo "version=$(./gradlew -q getVersion)" >> $GITHUB_OUTPUT
         id: plugin
+      - name: set mc version
+        run: echo "version=$(./gradlew -q getMinecraftVersion)" >> $GITHUB_OUTPUT
+        id: mc
       - name: upload
         uses: softprops/action-gh-release@v1
         with:
-          name: UnQuitter v${{steps.plugin.outputs.version}}
-          files: build/libs/*-${{steps.plugin.outputs.version}}.jar
+          name: UnQuitter v${{steps.plugin.outputs.version}} for Minecraft v${{steps.mc.outputs.version}}
+          files: build/libs/*-v${{steps.plugin.outputs.version}}-mc${{steps.mc.outputs.version}}.jar
